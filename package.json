@@ -1,0 +1,12 @@
+{
+  "name": "sinuca",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.lua",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "love": "C:/Funcionarios/Projetos/love2d/love.exe ."
+  },
+  "author": "",
+  "license": "ISC"
+}
