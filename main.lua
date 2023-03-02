@@ -1,8 +1,21 @@
-function buildPoolBordersShape(x, y, width, height)
+function buildPoolBordersShape(x, y, width, height, invertX, invertY)
 
-    coords = {0, 0,  1, 1.5,  1, 2,  4, 2,  4.5, 1.5,  5.5, 0}
+    invertX = invertX or false
+    invertY = invertY or false
 
-    x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6 = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    if invertY then 
+        multiplyBy = -1 
+    else 
+        multiplyBy = 1 
+    end
+
+    if invertX then 
+        chamferA, chamferB = 0.96, 0.02          
+    else 
+        chamferA, chamferB = 0.04, 0.98 
+    end
+
+    coords = { 0, 0,  chamferA, multiplyBy * 1, chamferB, multiplyBy * 1,  1, 0 }
     
     for i, coord in ipairs(coords) do
 
@@ -14,7 +27,19 @@ function buildPoolBordersShape(x, y, width, height)
 
     end
    
-    return love.physics.newPolygonShape(coords)   
+    border = {}
+    
+    border.offsetX = 300
+    border.offsetY = 5
+    border.x = 110
+    border.y = 134
+    border.width = 250
+    border.height = 10
+    border.body = love.physics.newBody(world, border.x, border.y, "static")
+    border.shape = love.physics.newPolygonShape(coords)
+    border.fixture = love.physics.newFixture(border.body, border.shape)
+
+    return border   
 
 end
 
@@ -24,34 +49,13 @@ function love.load()
     world = love.physics.newWorld(0, 0, true)
 
     borders = {}
-   border = {}
-    
-    border.offsetX = 300
-    border.offsetY = 5
-    border.x = 110
-    border.y = 134
-    border.width = 250
-    border.height = 10
-    border.body = love.physics.newBody(world, border.x, border.y, "static")
-    border.shape = buildPoolBordersShape(100, 100, 100, 10) 
-    border.fixture = love.physics.newFixture(border.body, border.shape)
+ 
 
-  table.insert(borders, border)  
+    table.insert(borders, buildPoolBordersShape(100, 132, 270, 11))  
+    table.insert(borders, buildPoolBordersShape(404, 132, 272, 11, true, false))  
+    table.insert(borders, buildPoolBordersShape(100, 454, 270, 11, false, true))  
+    table.insert(borders, buildPoolBordersShape(404, 454, 272, 11, true, true))  
 
-   --[[   border = {}
-
-    border.offsetX = 300
-    border.offsetY = 5
-    border.x = 20
-    border.y = 442
-    border.width = 600
-    border.height = 10
-    border.body = love.physics.newBody(world, border.x, border.y, "static")
-    border.shape = love.physics.newRectangleShape(border.offsetX, border.offsetY, border.width, border.height)    
-    border.fixture = love.physics.newFixture(border.body, border.shape)
-
-    table.insert(borders, border)*/
-    --]]
     pool = {} 
     pool.image = love.graphics.newImage( "table.png" )     
    
@@ -63,18 +67,8 @@ function love.update(dt)
 end
 
 function love.draw()
-    --love.graphics.setColor(.4, .4, .4)
-   -- love.graphics.rectangle("fill", bodyPlatform:getX(), bodyPlatform:getY(), 600, 10)
-   -- love.graphics.circle("fill", bodyBall:getX(), bodyBall:getY(), 10)
-  -- love.graphics.draw(table.image, 50, 100, 0 , 0.15, 0.15)
 
-  --local vertices  = {100,100, 200,100, 200,200, 300,200, 300,300, 100,300} -- Concave "L" shape.
---local triangles = love.math.triangulate(vertices)
-
---for i, triangle in ipairs(triangles) do
---	love.graphics.polygon("fill", triangle)
---end
-
+   love.graphics.draw(pool.image, 50, 100, 0 , 0.15, 0.15)
    love.graphics.setColor(1, 1, 1)
 
     for  _, border in pairs(borders) do
@@ -82,7 +76,7 @@ function love.draw()
         local triangles = love.math.triangulate({ border.shape:getPoints() })
 
         for _, triangle in ipairs(triangles) do
-            love.graphics.polygon("fill", triangle)
+            love.graphics.polygon("line", triangle)
         end
 
     end 
