@@ -107,20 +107,6 @@ function love.draw()
     --love.graphics.circle("fill", ball.body:getX()  , ball.body:getY(), ball.radius)
 
 
-    for _, body in pairs(world:getBodies()) do
-        for _, fixture in pairs(body:getFixtures()) do
-            local shape = fixture:getShape()
-    
-            if shape:typeOf("CircleShape") then
-                local cx, cy = body:getWorldPoints(shape:getPoint())
-                love.graphics.circle("fill", cx, cy, shape:getRadius())
-            elseif shape:typeOf("PolygonShape") then
-                love.graphics.polygon("fill", body:getWorldPoints(shape:getPoints()))
-            else
-                love.graphics.line(body:getWorldPoints(shape:getPoints()))
-            end
-        end
-    end
 end
 
 function love.mousepressed(x, y, button, istouch)
