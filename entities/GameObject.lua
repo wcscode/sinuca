@@ -3,5 +3,6 @@ GameObject = {
     shape,
     fixture,
     startX,
-    startY
+    startY,
+    image
 }
