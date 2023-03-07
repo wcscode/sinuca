@@ -2,11 +2,12 @@ require "entities.GameObject"
 
 PoolTable = { borders = {} }
 
+setmetatable(PoolTable, GameObject)
+
 function PoolTable:new()
 
     self.__index = self
 
-    setmetatable(PoolTable, GameObject)
     local _ = setmetatable({}, PoolTable)
 
     table.insert(self.borders, buildPoolBordersShape(100, 132, 270, 11, "horizontal", false, false))  
@@ -28,12 +29,11 @@ function PoolTable:new()
 end 
 
 function PoolTable:update(dt)
-    --self.body:applyForce(100, 100)
+    
 end
 
-function PoolTable:draw()
-    
-    --love.graphics.draw(self.image, 50, 100, 0 , 0.15, 0.15)
+function PoolTable:draw()    
+
     love.graphics.draw(self.image, 50, 100)
 
     for  _, border in pairs(self.borders) do
