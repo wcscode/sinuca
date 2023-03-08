@@ -1,4 +1,4 @@
-function buildInitialPositionOfBalls(poolTable, ball)
+function buildInitialPositionOfBalls(world, poolTable, ball)
 
     local balls = {}
 
@@ -23,7 +23,7 @@ function buildInitialPositionOfBalls(poolTable, ball)
     return balls[1], balls   
 end 
 
-function buildPoolBordersShape(x, y, width, height, orientation, invertX, invertY)  
+function buildPoolBordersShape(world, x, y, width, height, orientation, invertX, invertY)  
 
     local multiplyBy = 1
     local chamferA, chamferB = 0.04, 0.98  

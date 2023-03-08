@@ -1,36 +1,23 @@
-function debugWorldPolygonsShapes(objs)
-    
-    for  _, obj in pairs(objs) do
-        local triangles = love.math.triangulate({ obj.body:getWorldPoints(obj.shape:getPoints()) })
 
-        for _, triangle in ipairs(triangles) do
-            love.graphics.polygon("line", triangle)
-        end
-    end
-end   
-
-function debugCircleShapes(objs)
-    
-    for  _, obj in pairs(objs) do
-        
-            love.graphics.circle("line", obj.body:getX(), obj.body:getY(), obj.shape:getRadius())
-        
-    end
-end 
-
-function debugLineEdges(objs)
-    
-    for  _, obj in pairs(objs) do
-
-        local x1, y1, x2, y2 = obj.body:getWorldPoints(obj.shape:getPoints())       
-        love.graphics.line(x1, y1, x2, y2)        
-    end
-end  
-
-function debugBall(ball)
-    love.graphics.circle("fill", ball.body:getX(),  ball.body:getY(), ball.shape:getRadius())   
-end
 function debugMousePosition(x, y)
     
     print("x: "..  x .." y: "..  y)
+end   
+
+
+function debug()
+    for _, body in pairs(world:getBodies()) do
+        for _, fixture in pairs(body:getFixtures()) do
+            local shape = fixture:getShape()
+    
+            if shape:typeOf("CircleShape") then
+                local cx, cy = body:getWorldPoints(shape:getPoint())
+                love.graphics.circle("fill", cx, cy, shape:getRadius())
+            elseif shape:typeOf("PolygonShape") then
+                love.graphics.polygon("fill", body:getWorldPoints(shape:getPoints()))
+            else
+                love.graphics.line(body:getWorldPoints(shape:getPoints()))
+            end
+        end
+    end
 end    

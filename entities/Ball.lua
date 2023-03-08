@@ -4,8 +4,7 @@ Ball = { startX, startY, number, radius  }
 
 setmetatable(Ball, GameObject)
 
-function Ball:new(word, startX, startY, number)
-   
+function Ball:new(word, startX, startY, number)   
     self.__index = self
     
     local _ = setmetatable({}, Ball)
@@ -31,8 +30,6 @@ function Ball:update(dt)
 end
 
 function Ball:draw()
-
-    love.graphics.draw(self.image, self.body:getX(),  self.body:getY(), 0, 1, 1, self.centerOrigin, self.centerOrigin)
-    debugBall(self)
+    love.graphics.draw(self.image, self.body:getX(),  self.body:getY(), 0, 1, 1, self.centerOrigin, self.centerOrigin)  
 end 
 
