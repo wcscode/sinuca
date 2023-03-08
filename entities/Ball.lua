@@ -33,6 +33,6 @@ end
 function Ball:draw()
 
     love.graphics.draw(self.image, self.body:getX(),  self.body:getY(), 0, 1, 1, self.centerOrigin, self.centerOrigin)
-    --love.graphics.circle("fill", self.body:getX(),  self.body:getY(), self.shape:getRadius())   
+    debugBall(self)
 end 
 

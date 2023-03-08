@@ -27,6 +27,9 @@ function debugLineEdges(objs)
     end
 end  
 
+function debugBall(ball)
+    love.graphics.circle("fill", ball.body:getX(),  ball.body:getY(), ball.shape:getRadius())   
+end
 function debugMousePosition(x, y)
     
     print("x: "..  x .." y: "..  y)

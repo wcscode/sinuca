@@ -39,7 +39,7 @@ end
 function Cue:mousepressed(x, y, button, istouch) 
 
     if button == 1 then 
-        self.targetBall.body:applyLinearImpulse(self.targetX * 400, self.targetY * 400)       
+        self.targetBall.body:applyLinearImpulse(self.targetX * 50, self.targetY * 50)       
     end
 end
 
