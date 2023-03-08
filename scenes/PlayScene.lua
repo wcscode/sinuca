@@ -25,7 +25,7 @@ function PlayScene:update(dt)
     end
 end
 
-function PlayScene:draw()
+function PlayScene:draw()    
     
     self.poolTable:draw()
     self.cue:draw()
@@ -34,7 +34,7 @@ function PlayScene:draw()
         ball:draw()
     end
 
-    love.graphics.print("x: ".. clientX .." y: ".. clientY, 10, 10)
+    love.graphics.print("x: "..  self.cue.targetX .." y: "..  self.cue.targetY, 10, 10)
                                                
 end
 
@@ -50,12 +50,13 @@ function PlayScene:setInitialPositionOfBalls(poolTable, ball)
     local offsetYPosition = 12
     local number = 1
 
-    for x = 1, 5 do
+    for x = 1, 5 do        
         for y = 1, ballPerColumn  do   
 
             table.insert(balls, ball:new(word, ballInitialPosition.x + (x * gapBetweenBall), ballInitialPosition.y + (y * gapBetweenBall) + (offsetYPosition * x -1), number))            
             number = number + 1
         end
+
         ballPerColumn = ballPerColumn - 1
     end
 
@@ -64,15 +65,16 @@ end
 
 function PlayScene:mousepressed(x, y, button, istouch)  
    
-    if button == 1 then -- Versions prior to 0.10.0 use the MouseConstant 'l'
-        self.whiteBall.body:applyLinearImpulse(-1000, 0)
-       -- print(((x - ball.body:getX()) * 10).." "..((y - ball.body:getY()) * 10))
+    if button == 1 then 
+        self.whiteBall.body:applyLinearImpulse(-1000, 0)       
     end
  end
 
  function PlayScene:mousemoved(x, y, dx, dy, istouch)
 
-   clientX = x
-   clientY = y    
+    --self.whiteBall.body:
+    self.cue.angle = math.atan2(y, x)
+    self.cue.targetX = x --math.cos(angle)
+    self.cue.targetY = y --math.sin(angle)    
  end
 
