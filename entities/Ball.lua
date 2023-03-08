@@ -19,8 +19,10 @@ function Ball:new(word, startX, startY, number)
     _.body = love.physics.newBody(world, _.startX, _.startY, "dynamic")
     _.shape = love.physics.newCircleShape(self.radius)
     _.fixture = love.physics.newFixture(_.body, _.shape)
+    _.fixture:setUserData(_.number)
     _.image = love.graphics.newImage("images/ball_" .. _.number .. ".png", {dpiscale = 6 })   
     _.centerOrigin = _.image:getWidth() / 2
+    
     return _
 end
 
@@ -33,3 +35,4 @@ function Ball:draw()
     love.graphics.draw(self.image, self.body:getX(),  self.body:getY(), 0, 1, 1, self.centerOrigin, self.centerOrigin)
     --love.graphics.circle("fill", self.body:getX(),  self.body:getY(), self.shape:getRadius())   
 end 
+

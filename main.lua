@@ -1,8 +1,11 @@
 require "scenes.PlayScene"
+require "utilities.debug"
 
 function love.load()
 
     world = love.physics.newWorld(0, 0, true)
+    world:setCallbacks(beginContact, endContact, preSolve, postSolve)
+
     scenes = { PlayScene:new(true) }
     
 end 
@@ -27,6 +30,8 @@ end
 
 function love.mousepressed(x, y, button, istouch)
 
+    debugMousePosition(x, y)
+
     for _, scene in pairs(scenes) do
         scene:mousepressed(x, y, button, istouch)
     end
@@ -38,3 +43,10 @@ function love.mousemoved(x, y, dx, dy, istouch)
         scene:mousemoved(x, y, dx, dy, istouch)
     end
 end
+
+function beginContact(a, b, coll)    
+
+    for _, scene in pairs(scenes) do
+        scene:beginContact(a, b, coll)
+    end
+end    

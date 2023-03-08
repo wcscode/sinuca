@@ -2,13 +2,14 @@ require "scenes.Scene"
 require "entities.PoolTable"
 require "entities.Ball"
 require "entities.Cue"
+require "utilities.builders"
 
 PlayScene = { poolTable,  balls = {}, whiteBall }
 
 function PlayScene:new(word, active)
 
     self.poolTable = PoolTable:new()
-    self.whiteBall, self.balls = PlayScene:setInitialPositionOfBalls(self.poolTable, Ball)
+    self.whiteBall, self.balls = buildInitialPositionOfBalls(self.poolTable, Ball)
    
     self.cue = Cue:new(word, self.whiteBall)
 
@@ -32,49 +33,36 @@ function PlayScene:draw()
 
     for _, ball in pairs(self.balls) do       
         ball:draw()
-    end
-
-    love.graphics.print("x: "..  self.cue.targetX .." y: "..  self.cue.targetY, 10, 10)
-                                               
+    end                                               
 end
-
-function PlayScene:setInitialPositionOfBalls(poolTable, ball)
-
-    local balls = {}
-
-    table.insert(balls, ball:new(word, 555, 290))
-
-    local ballPerColumn = 5
-    local ballInitialPosition = { x = 200, y = (poolTable.image:getHeight() / 2) + 20  }
-    local gapBetweenBall = 20
-    local offsetYPosition = 12
-    local number = 1
-
-    for x = 1, 5 do        
-        for y = 1, ballPerColumn  do   
-
-            table.insert(balls, ball:new(word, ballInitialPosition.x + (x * gapBetweenBall), ballInitialPosition.y + (y * gapBetweenBall) + (offsetYPosition * x -1), number))            
-            number = number + 1
-        end
-
-        ballPerColumn = ballPerColumn - 1
-    end
-
-    return balls[1], balls   
-end 
 
 function PlayScene:mousepressed(x, y, button, istouch)  
    
-    if button == 1 then 
-        self.whiteBall.body:applyLinearImpulse(-1000, 0)       
+    self.cue:mousepressed(x, y, button, istouch) 
+end
+
+function PlayScene:mousemoved(x, y, dx, dy, istouch)
+
+    self.cue:mousemoved(x, y, dx, dy, istouch)     
+end
+
+function PlayScene:beginContact(a, b, coll)    
+  
+    --self.balls[b:getUserData() + 1]:beginContact(a, b, coll)
+
+    --print(a:getUserData(), b:getUserData())
+    
+    if a:getUserData() == "pocket" then                  
+        
+        local numberOfBall = b:getUserData()
+        print("removed " .. numberOfBall + 1)
+
+        if(numberOfBall > 1) then
+
+            table.remove(self.balls, numberOfBall + 1)
+            b:getShape():release()
+            --b:getBody():release()
+       -- b:release()             
+        end
     end
- end
-
- function PlayScene:mousemoved(x, y, dx, dy, istouch)
-
-    --self.whiteBall.body:
-    self.cue.angle = math.atan2(y, x)
-    self.cue.targetX = x --math.cos(angle)
-    self.cue.targetY = y --math.sin(angle)    
- end
-
+end   
