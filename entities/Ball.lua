@@ -4,7 +4,7 @@ Ball = { startX, startY, number, radius  }
 
 setmetatable(Ball, GameObject)
 
-function Ball:new(word, startX, startY, number)   
+function Ball:new(world, startX, startY, number)   
     self.__index = self
     
     local _ = setmetatable({}, Ball)
@@ -19,6 +19,9 @@ function Ball:new(word, startX, startY, number)
     _.shape = love.physics.newCircleShape(self.radius)
     _.fixture = love.physics.newFixture(_.body, _.shape)
     _.fixture:setUserData(_.number)
+    _.fixture:setFriction(1)
+    _.fixture:setDensity(1)
+    _.fixture:setRestitution(0.5)
     _.image = love.graphics.newImage("images/ball_" .. _.number .. ".png", {dpiscale = 6 })   
     _.centerOrigin = _.image:getWidth() / 2
     

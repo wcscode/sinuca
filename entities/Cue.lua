@@ -1,6 +1,6 @@
 require "entities.GameObject"
 
-Cue = { targetBall, targetX, targetY, angle }
+Cue = { targetBall, targetX, targetY, angle, MIN_FORCE = 5, MAX_FORCE = 70 }
 
 setmetatable(Cue, GameObject)
 
@@ -33,7 +33,7 @@ end
 
 function Cue:mousepressed(x, y, button, istouch)
     if button == 1 then 
-        self.targetBall.body:applyLinearImpulse(self.targetX * 50, self.targetY * 50)       
+        self.targetBall.body:applyLinearImpulse(self.targetX * self.MAX_FORCE, self.targetY * self.MAX_FORCE)       
     end
 end
 

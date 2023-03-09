@@ -5,7 +5,7 @@ function debugMousePosition(x, y)
 end   
 
 
-function debug()
+function debug(world)
     for _, body in pairs(world:getBodies()) do
         for _, fixture in pairs(body:getFixtures()) do
             local shape = fixture:getShape()

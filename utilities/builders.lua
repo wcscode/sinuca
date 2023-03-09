@@ -2,7 +2,7 @@ function buildInitialPositionOfBalls(world, poolTable, ball)
 
     local balls = {}
 
-    table.insert(balls, ball:new(word, 555, 290))
+    table.insert(balls, ball:new(world, 555, 290))
 
     local ballPerColumn = 5
     local ballInitialPosition = { x = 200, y = (poolTable.image:getHeight() / 2) + 20  }
@@ -13,12 +13,24 @@ function buildInitialPositionOfBalls(world, poolTable, ball)
     for x = 1, 5 do        
         for y = 1, ballPerColumn  do   
 
-            table.insert(balls, ball:new(word, ballInitialPosition.x + (x * gapBetweenBall), ballInitialPosition.y + (y * gapBetweenBall) + (offsetYPosition * x -1), number))            
+            local _ball = ball:new(
+                world, 
+                ballInitialPosition.x + (x * gapBetweenBall), 
+                ballInitialPosition.y + (y * gapBetweenBall) + (offsetYPosition * x -1),
+                number
+            )
+
+            _ball.body:setMass(4)
+
+            table.insert(balls, _ball) 
+
             number = number + 1
         end
 
         ballPerColumn = ballPerColumn - 1
     end
+
+    balls[1].body:setMass(6)
 
     return balls[1], balls   
 end 
@@ -70,12 +82,14 @@ function buildPoolBordersShape(world, x, y, width, height, orientation, invertX,
     border.body = love.physics.newBody(world, border.x, border.y, "static")
     border.shape = love.physics.newPolygonShape(coords)
     border.fixture = love.physics.newFixture(border.body, border.shape)
+    border.fixture:setFriction(1)
+    border.fixture:setDensity(1)
 
     return border   
 
 end
 
-function buildPoolPocketShape(x, y, radius)
+function buildPoolPocketShape(world, x, y, radius)
 
     local pocket = {}
 

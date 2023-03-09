@@ -6,11 +6,11 @@ require "utilities.builders"
 
 PlayScene = { poolTable,  balls = {}, whiteBall }
 
-function PlayScene:new(word, active)
-    self.poolTable = PoolTable:new()
-    self.whiteBall, self.balls = buildInitialPositionOfBalls(self.poolTable, Ball)   
-    self.cue = Cue:new(word, self.whiteBall)
-
+function PlayScene:new(world, active)
+    self.poolTable = PoolTable:new(world)
+    self.whiteBall, self.balls = buildInitialPositionOfBalls(world, self.poolTable, Ball)   
+    self.cue = Cue:new(world, self.whiteBall)
+    
     local _ = PlayScene
 
     return setmetatable(_, {__index = Scene})
