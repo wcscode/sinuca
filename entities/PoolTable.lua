@@ -10,15 +10,7 @@ function PoolTable:new(world)
     self.__index = self
     local _ = setmetatable({}, PoolTable)
 
-    self.table = {}
-
-    self.table.body = love.physics.newBody(world, 270, 330)
-    self.table.shape = love.physics.newRectangleShape(500, 300)
-    self.table.fixture = love.physics.newFixture(
-        self.table.body, 
-        self.table.shape, 
-        1)
-
+    
 
     table.insert(self.borders, buildPoolBordersShape(world, 100, 132, 270, 11, "horizontal", false, false))  
     table.insert(self.borders, buildPoolBordersShape(world, 404, 132, 272, 11, "horizontal", true, false))  

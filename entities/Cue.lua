@@ -1,18 +1,20 @@
 require "entities.GameObject"
 
-Cue = { targetBall, targetX, targetY, angle, MIN_FORCE = 5, MAX_FORCE = 70 }
+Cue = { targetBall, targetX, targetY, angle, hit, MAX_STRENGTH = 100 }
 
 setmetatable(Cue, GameObject)
 
-function Cue:new(word, targetBall)
+function Cue:new(word, targetBall, hit)
     self.__index = self
     self.image = love.graphics.newImage("images/cue.png")
+
     local _ = setmetatable({}, Cue)
 
     _.targetBall = targetBall
     _.targetX = 0
     _.targetY = 0
-    _.angle = 0
+    _.angle = 0   
+    _.hit = hit
 
     return _
 end    
@@ -32,8 +34,12 @@ function Cue:draw()
 end 
 
 function Cue:mousepressed(x, y, button, istouch)
+   -- print("str " ..self.hit.strength)
     if button == 1 then 
-        self.targetBall.body:applyLinearImpulse(self.targetX * self.MAX_FORCE, self.targetY * self.MAX_FORCE)       
+        self.targetBall.body:applyLinearImpulse(
+            self.targetX * self.hit.strength * self.MAX_STRENGTH, 
+            self.targetY * self.hit.strength * self.MAX_STRENGTH
+        )       
     end
 end
 

@@ -1,11 +1,11 @@
 
-function debugMousePosition(x, y)
-    
-    print("x: "..  x .." y: "..  y)
+function debugMousePosition(x, y)    
+    love.graphics.print("x: "..  love.mouse.getX() .." y: "..  love.mouse.getY(), 10, 10)    
+   -- print("x: "..  x .." y: "..  y)
 end   
 
 
-function debug(world)
+function debugShapes(world)
     for _, body in pairs(world:getBodies()) do
         for _, fixture in pairs(body:getFixtures()) do
             local shape = fixture:getShape()

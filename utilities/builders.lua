@@ -97,6 +97,7 @@ function buildPoolPocketShape(world, x, y, radius)
     pocket.shape = love.physics.newCircleShape(radius)
     pocket.fixture = love.physics.newFixture(pocket.body, pocket.shape)
     pocket.fixture:setUserData("pocket")
+    pocket.fixture:setSensor(true)
 
     return pocket
 end    

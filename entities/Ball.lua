@@ -33,6 +33,9 @@ function Ball:update(dt)
 end
 
 function Ball:draw()
-    love.graphics.draw(self.image, self.body:getX(),  self.body:getY(), 0, 1, 1, self.centerOrigin, self.centerOrigin)  
+   -- print("O número da bola é" .. self.number)
+   -- if self.body then
+        love.graphics.draw(self.image, self.body:getX(),  self.body:getY(), 0, 1, 1, self.centerOrigin, self.centerOrigin)  
+   -- end
 end 
 
