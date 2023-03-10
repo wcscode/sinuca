@@ -22,7 +22,7 @@ end
 
 function love.draw()
     love.graphics.setColor(1, 1, 1)
-    
+
     for _, scene in pairs(scenes) do
         scene:draw()
     end

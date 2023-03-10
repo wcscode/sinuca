@@ -1,7 +1,6 @@
 UIStrengthBar = { x, y, width, height, strength }
 
-function UIStrengthBar:new(x, y, active)  
-    
+function UIStrengthBar:new(x, y, active)    
     self.x = x
     self.y = y
     self.width = 150
@@ -24,10 +23,6 @@ function UIStrengthBar:update(dt)
         self.hit.strength = 1
         self.acc = 0
     end
-end
-
-function normalize(value, min, max)
-    return (value - min) / (max - min) + max
 end
 
 function UIStrengthBar:draw()

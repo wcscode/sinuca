@@ -1,9 +1,22 @@
 
 function debugMousePosition(x, y)    
-    love.graphics.print("x: "..  love.mouse.getX() .." y: "..  love.mouse.getY(), 10, 10)    
-   -- print("x: "..  x .." y: "..  y)
+    love.graphics.print("x: "..  love.mouse.getX() .." y: "..  love.mouse.getY(), 10, 10) 
 end   
 
+function debugBalls(balls) 
+    local nTables = ""
+    local nDatas = ""
+    for i, ball in pairs(balls) do
+       
+        nTables = nTables .."i "..i.." number "..ball.number.. "\n "
+
+       -- if not ball.fixture:isDestroyed() then
+            nDatas = nDatas .. ball.fixture:getUserData() .. " "
+       -- end
+    end
+     
+   love.graphics.print("tables\n"..nTables.. " datas\n".. nDatas, 10, 25) 
+end
 
 function debugShapes(world)
     for _, body in pairs(world:getBodies()) do
