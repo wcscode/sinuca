@@ -26,7 +26,7 @@ function PoolTable:new(world)
     table.insert(self.pockets, buildPoolPocketShape(world, 387, 458, 17))
     table.insert(self.pockets, buildPoolPocketShape(world, 83, 451, 17))
 
-    self.image = love.graphics.newImage("images/table.png", {dpiscale = 6.66})
+    self.image = love.graphics.newImage("assets/images/table.png", {dpiscale = 6.66})
 
     return _
 end 

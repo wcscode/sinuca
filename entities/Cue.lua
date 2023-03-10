@@ -6,7 +6,7 @@ setmetatable(Cue, GameObject)
 
 function Cue:new(word, targetBall, hit)
     self.__index = self
-    self.image = love.graphics.newImage("images/cue.png")
+    self.image = love.graphics.newImage("assets/images/cue.png")
 
     local _ = setmetatable({}, Cue)
 

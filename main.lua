@@ -1,3 +1,4 @@
+require "scenes.StartScene"
 require "scenes.PlayScene"
 require "utilities.debug"
 
@@ -6,10 +7,13 @@ local world
 function love.load()    
 
     enableDebug = false
-
+    
     world = love.physics.newWorld(0, 0, true)
     world:setCallbacks(beginContact, endContact, preSolve, postSolve)  
-    scenes = { PlayScene:new(world, true) }   
+    scenes = { 
+        StartScene:new()--,
+      --  PlayScene:new(world, true) 
+    }   
 end 
 
 function love.update(dt)

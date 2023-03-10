@@ -22,7 +22,7 @@ function Ball:new(world, startX, startY, number)
     _.fixture:setFriction(1)
     _.fixture:setDensity(1)
     _.fixture:setRestitution(0.5)
-    _.image = love.graphics.newImage("images/ball_" .. _.number .. ".png", {dpiscale = 6 })   
+    _.image = love.graphics.newImage("assets/images/ball_" .. _.number .. ".png", {dpiscale = 6 })   
     _.centerOrigin = _.image:getWidth() / 2
     
     return _
