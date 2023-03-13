@@ -11,8 +11,8 @@ function love.load()
     world = love.physics.newWorld(0, 0, true)
     world:setCallbacks(beginContact, endContact, preSolve, postSolve)  
     scenes = { 
-        StartScene:new()--,
-      --  PlayScene:new(world, true) 
+      --  StartScene:new()--,
+        PlayScene:new(world, true) 
     }   
 end 
 
