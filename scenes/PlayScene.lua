@@ -8,7 +8,9 @@ require "utilities.builders"
 require "utilities.general"
 require "utilities.StateManager"
 
-PlayScene = Scene
+PlayScene = {} 
+PlayScene.__index = PlayScene
+setmetatable(PlayScene, Scene)
 
 local _poolTable
 local _uiStrengthBar
@@ -18,12 +20,13 @@ local _uiListBalls
 local _cue
 local _matchState
 
-function PlayScene:new(world, active)
+function PlayScene.new(world)
     local instance = setmetatable({}, PlayScene)
-
+    print(world)
     _poolTable = PoolTable:new(world)
+   
     _uiStrengthBar = UIStrengthBar:new(585, 10, false) 
-    _whiteBall, _balls = buildInitialPositionOfBalls(world, _poolTable, Ball)
+    _whiteBall, _balls = buildInitialPositionOfBalls(world, _poolTable, Ball)       
     _uiListBalls = UIListBalls:new(50, 10, _balls)   
     _cue = Cue:new(world, _whiteBall, _uiStrengthBar.hit)    
 

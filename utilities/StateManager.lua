@@ -11,6 +11,8 @@ function StateManager:new()
 end
 
 function StateManager:add(name, value)
+    --print("value")
+    --print(value)
     value = value or nil
     table.insert(_states, {name = name, value = value})
 end

@@ -5,13 +5,18 @@ StartScene = {}
 StartScene.__index = StartScene
 setmetatable(StartScene, Scene)
 
-local _screenCenterX, _screenCenterY = screenCenterXY()
+local _screenCenterX
+local _screenCenterY 
 local _backgroundImage
-local _font = love.graphics.newFont("assets/fonts/Kenney Blocks.ttf", 40)
+local _font
 
-function StartScene.new()
+function StartScene:new()
+    local instance = setmetatable({}, StartScene) 
+    
+    _screenCenterX, _screenCenterY = screenCenterXY()
+    _font = love.graphics.newFont("assets/fonts/Kenney Blocks.ttf", 40)
     _backgroundImage = love.graphics.newImage("assets/images/start_scene_background.png", {dpiscale = 1.7 })
-    local instance = setmetatable({}, StartScene)         
+            
     return instance
 end
 
