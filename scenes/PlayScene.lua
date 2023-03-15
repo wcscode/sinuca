@@ -8,69 +8,77 @@ require "utilities.builders"
 require "utilities.general"
 require "utilities.StateManager"
 
-PlayScene = { poolTable,  balls = {}, whiteBall }
+PlayScene = Scene
+
+local _poolTable
+local _uiStrengthBar
+local _whiteBall
+local _balls
+local _uiListBalls
+local _cue
+local _matchState
 
 function PlayScene:new(world, active)
-    self.poolTable = PoolTable:new(world)
-    self.uiStrengthBar = UIStrengthBar:new(585, 10, false) 
-    self.whiteBall, self.balls = buildInitialPositionOfBalls(world, self.poolTable, Ball)
-    self.uiListBalls = UIListBalls:new(50, 10, self.balls)   
-    self.cue = Cue:new(world, self.whiteBall, self.uiStrengthBar.hit)    
+    local instance = setmetatable({}, PlayScene)
 
-    self.matchState = StateManager.new()
+    _poolTable = PoolTable:new(world)
+    _uiStrengthBar = UIStrengthBar:new(585, 10, false) 
+    _whiteBall, _balls = buildInitialPositionOfBalls(world, _poolTable, Ball)
+    _uiListBalls = UIListBalls:new(50, 10, _balls)   
+    _cue = Cue:new(world, _whiteBall, _uiStrengthBar.hit)    
+
+    _matchState = StateManager.new()
     
-    self.matchState:add("analyzing")
-    self.matchState:add("strike")
-    self.matchState:add("rolling")
+    _matchState:add("analyzing")
+    _matchState:add("strike")
+    _matchState:add("rolling")
 
-    self.matchState:setActiveState("analyzing")
+    _matchState:setActive("analyzing")    
 
-    local _ = PlayScene
-
-    return setmetatable(_, {__index = Scene})
+    return instance
 end
 
 function PlayScene:update(dt)
-    self.uiListBalls:update(dt)
+    _uiListBalls:update(dt)
 
-    if self.matchState.getActiveState() == "strike" then
-        self.uiStrengthBar:update(dt)
+    if _matchState.isActive("strike") then
+        _uiStrengthBar:update(dt)
     end
 
-    for _, ball in pairs(self.balls) do
+    for _, ball in pairs(_balls) do
         ball:update(dt)
     end
 end
 
 function PlayScene:draw() 
-    self.uiListBalls:draw() 
-    self.uiStrengthBar:draw()
-    self.poolTable:draw()
-    self.cue:draw()
+    _uiListBalls:draw() 
+    _uiStrengthBar:draw()
+    _poolTable:draw()
+    _cue:draw()
 
-    for _, ball in pairs(self.balls) do       
+    for _, ball in pairs(_balls) do       
         ball:draw()
     end    
-    print(self.matchState:getActiveState())
+    
     if not enableDebug then        
-        debugBalls(self.balls)
+        debugBalls(_balls)
     end
 end
 
 function PlayScene:mousepressed(x, y, button, istouch) 
-    if self.matchState:getActiveState() == "strike" then
-        self.matchState:setActiveState("rolling")
-        self.cue:mousepressed(x, y, button, istouch)
+    if _matchState:isActive("strike") then
+        _matchState:setActive("rolling")
+        _cue:mousepressed(x, y, button, istouch)
     end 
 
-    if self.matchState:getActiveState() == "analyzing" then
-        self.matchState:setActiveState("strike")
+    if _matchState:isActive("analyzing") then
+        _matchState:setActive("strike")
     end
 end
 
 function PlayScene:mousemoved(x, y, dx, dy, istouch)
-    if self.matchState:getActiveState() == "analyzing" then
-        self.cue:mousemoved(x, y, dx, dy, istouch)
+    if _matchState:isActive("analyzing") then
+        _cue:mousemoved(x, y, dx, dy, istouch)
     end     
 end
 
@@ -80,9 +88,9 @@ function PlayScene:beginContact(a, b, coll)
         local numberOfBall = b:getUserData()        
 
         if(numberOfBall >= 1) then
-            for index, ball in pairs(self.balls) do
+            for index, ball in pairs(_balls) do
                 if ball.number == numberOfBall then
-                    table.remove(self.balls, index)    
+                    table.remove(_balls, index)    
                 end
             end
 

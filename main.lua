@@ -2,46 +2,57 @@ require "scenes.StartScene"
 require "scenes.PlayScene"
 require "utilities.debug"
 
-local world 
+local _world 
+local _stateScene
 
 function love.load()    
 
     enableDebug = false
     
-    world = love.physics.newWorld(0, 0, true)
-    world:setCallbacks(beginContact, endContact, preSolve, postSolve)  
-    scenes = { 
-      --  StartScene:new()--,
-        PlayScene:new(world, true) 
-    }   
+    _world = love.physics.newWorld(0, 0, true)
+    _world:setCallbacks(beginContact, endContact, preSolve, postSolve)  
+
+    _stateScene = StateManager.new()
+
+    _stateScene:add("start", StartScene:new())
+    _stateScene:add("play", PlayScene:new(_world, true))
+    
+    _stateScene:setActive("start")
 end 
 
 function love.update(dt)
-    world:update(dt)
+    _world:update(dt)
     
-    for _, scene in pairs(scenes) do        
-        scene:update(dt)
-    end
+    _stateScene:getActiveValue():update(dt)
+   -- for _, scene in pairs(scenes) do        
+   --     scene:update(dt)
+   -- end
 end
 
 function love.draw()
     love.graphics.setColor(1, 1, 1)
 
-    for _, scene in pairs(scenes) do
-        scene:draw()
-    end
+    _stateScene:getActiveValue():draw()
+    --for _, scene in pairs(scenes) do
+   --     scene:draw()
+   -- end
  
     if enableDebug then
-        debugShapes(world)   
+        debugShapes(_world)   
         debugMousePosition(love.mouse.getX(), love.mouse.getY())
     end
 end
 
 function love.mousepressed(x, y, button, istouch)
-    for _, scene in pairs(scenes) do
-        scene:mousepressed(x, y, button, istouch)
+   -- for _, scene in pairs(scenes) do
+   --     scene:mousepressed(x, y, button, istouch)
+   -- end
+    if _stateScene:isActive("start") then
+        _stateScene:setActive("play")
     end
-    
+
+    _stateScene:getActiveValue():mousepressed(x, y, button, istouch)
+
     if button == 2 then
         enableDebug = not enableDebug
     end
@@ -49,9 +60,10 @@ function love.mousepressed(x, y, button, istouch)
 end
 
 function love.mousemoved(x, y, dx, dy, istouch)
-    for _, scene in pairs(scenes) do
-        scene:mousemoved(x, y, dx, dy, istouch)
-    end
+  --  for _, scene in pairs(scenes) do
+  --      scene:mousemoved(x, y, dx, dy, istouch)
+  --  end
+  _stateScene:getActiveValue():mousepressed(x, y, button, istouch)
 end
 
 function beginContact(a, b, coll)

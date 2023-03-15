@@ -10,19 +10,29 @@ function StateManager:new()
     return instance
 end
 
-function StateManager:add(name)
-    table.insert(_states, name)
+function StateManager:add(name, value)
+    value = value or nil
+    table.insert(_states, {name = name, value = value})
 end
 
-function StateManager:setActiveState(name)   
-    for _, state in pairs(_states) do        
-        if state == name then
-            print(state)
+function StateManager:setActive(name)  
+    assert(name,"'name' parameter must be filled") 
+   
+    for _, state in pairs(_states) do               
+        if state.name == name then 
             _currentState = state           
         end
     end
 end
 
-function StateManager:getActiveState()
-    return _currentState
+function StateManager:isActive(name)    
+    return _currentState.name == name
+end
+
+function StateManager:getActiveValue()
+    return _currentState.value
+end
+
+function StateManager:getActiveName()
+    return _currentState.name
 end
