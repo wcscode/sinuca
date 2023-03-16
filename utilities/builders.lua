@@ -5,7 +5,7 @@ function buildInitialPositionOfBalls(world, poolTable, ball)
     table.insert(balls, ball.new(world, 555, 290))
 
     local ballPerColumn = 5
-    local ballInitialPosition = { x = 200, y = (poolTable:getImage():getHeight() / 2) + 20  }
+    local ballInitialPosition = { x = 200, y = (poolTable.image:getHeight() / 2) + 20  }
     local gapBetweenBall = 25
     local offsetYPosition = 12
     local number = 1
@@ -20,7 +20,7 @@ function buildInitialPositionOfBalls(world, poolTable, ball)
                 number
             )
 
-            _ball:getBody():setMass(4)
+            _ball.body:setMass(4)
 
             table.insert(balls, _ball) 
 
@@ -30,7 +30,7 @@ function buildInitialPositionOfBalls(world, poolTable, ball)
         ballPerColumn = ballPerColumn - 1
     end
 
-    balls[1]:getBody():setMass(6)
+    balls[1].body:setMass(6)
 
     return balls[1], balls   
 end 

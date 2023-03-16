@@ -27,7 +27,7 @@ function PlayScene.new(world)
    
     _uiStrengthBar = UIStrengthBar.new(585, 10, false) 
     _whiteBall, _balls = buildInitialPositionOfBalls(world, _poolTable, Ball)       
-    _uiListBalls = UIListBalls.new(50, 10, _balls)   
+    --_uiListBalls = UIListBalls.new(50, 10, _balls)   
     _cue = Cue.new(world, _whiteBall, _uiStrengthBar.hit)    
 
     _matchState = StateManager.new()
@@ -42,9 +42,9 @@ function PlayScene.new(world)
 end
 
 function PlayScene:update(dt)
-    _uiListBalls:update(dt)
+    --_uiListBalls:update(dt)
 
-    if _matchState.isActive("strike") then
+    if _matchState:isActive("strike") then
         _uiStrengthBar:update(dt)
     end
 
@@ -54,7 +54,7 @@ function PlayScene:update(dt)
 end
 
 function PlayScene:draw() 
-    _uiListBalls:draw() 
+    --_uiListBalls:draw() 
     _uiStrengthBar:draw()
     _poolTable:draw()
     _cue:draw()
@@ -68,18 +68,18 @@ function PlayScene:draw()
     end
 end
 
-function PlayScene:mousepressed(x, y, button, istouch) 
+function PlayScene:mousepressed(x, y, button, istouch)    
     if _matchState:isActive("strike") then
         _matchState:setActive("rolling")
         _cue:mousepressed(x, y, button, istouch)
     end 
 
     if _matchState:isActive("analyzing") then
-        _matchState:setActive("strike")
+       _matchState:setActive("strike")
     end
 end
 
-function PlayScene:mousemoved(x, y, dx, dy, istouch)
+function PlayScene:mousemoved(x, y, dx, dy, istouch)  
     if _matchState:isActive("analyzing") then
         _cue:mousemoved(x, y, dx, dy, istouch)
     end     
