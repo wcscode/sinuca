@@ -1,50 +1,52 @@
 require "entities.GameObject"
 
-Cue = { targetBall, targetX, targetY, angle, hit, MAX_STRENGTH = 100 }
-
+Cue = {}
+Cue.__index = Cue
 setmetatable(Cue, GameObject)
 
-function Cue:new(word, targetBall, hit)
-    self.__index = self
-    self.image = love.graphics.newImage("assets/images/cue.png")
+local _targetBall
+local _targetX = 0
+local _targetY = 0
+local _angle = 0
+local _hit
+local _MAX_STRENGTH = 100
 
-    local _ = setmetatable({}, Cue)
+function Cue.new(word, targetBall, hit)
+    local instance = setmetatable({}, Cue) 
 
-    _.targetBall = targetBall
-    _.targetX = 0
-    _.targetY = 0
-    _.angle = 0   
-    _.hit = hit
+    _targetBall = targetBall   
+    _hit = hit
 
-    return _
+    return instance
 end    
 
 function Cue:update(dt)
-   
+   return nil
 end
 
 function Cue:draw()    
-    love.graphics.translate( self.targetBall.body:getX(), self.targetBall.body:getY())   
-    love.graphics.line(0,0,        
-        self.targetX,
-        self.targetY
+    love.graphics.translate(
+        _targetBall:getBody():getX(),
+        _targetBall.getBody():getY()
     )   
-    
+    love.graphics.line(0, 0, _targetX, _targetY) 
     love.graphics.reset()
 end 
 
 function Cue:mousepressed(x, y, button, istouch)
-   -- print("str " ..self.hit.strength)
     if button == 1 then 
-        self.targetBall.body:applyLinearImpulse(
-            self.targetX * self.hit.strength * self.MAX_STRENGTH, 
-            self.targetY * self.hit.strength * self.MAX_STRENGTH
+        _targetBall.body:applyLinearImpulse(
+            _targetX * _hit.strength * _MAX_STRENGTH, 
+            _targetY * _hit.strength * _MAX_STRENGTH
         )       
     end
 end
 
 function Cue:mousemoved(x, y, dx, dy, istouch)   
-    self.angle = math.atan2(y - self.targetBall.body:getY(), x - self.targetBall.body:getX())    
-    self.targetX = math.cos(self.angle) * 100
-    self.targetY = math.sin(self.angle) * 100   
+    _angle = math.atan2(
+        y - _targetBall:getBody():getY(), 
+        x - _targetBall:getBody():getX()
+    )    
+    _targetX = math.cos(_angle) * 100
+    _targetY = math.sin(_angle) * 100   
  end

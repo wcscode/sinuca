@@ -8,10 +8,10 @@ function debugBalls(balls)
     local nDatas = ""
     for i, ball in pairs(balls) do
        
-        nTables = nTables .."i "..i.." number "..ball.number.. "\n "
+        nTables = nTables .."i "..i.." number "..ball:getNumber().. "\n "
 
        -- if not ball.fixture:isDestroyed() then
-            nDatas = nDatas .. ball.fixture:getUserData() .. " "
+            nDatas = nDatas .. ball:getFixture():getUserData() .. " "
        -- end
     end
      

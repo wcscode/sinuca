@@ -10,7 +10,7 @@ local _screenCenterY
 local _backgroundImage
 local _font
 
-function StartScene:new()
+function StartScene.new()
     local instance = setmetatable({}, StartScene) 
     
     _screenCenterX, _screenCenterY = screenCenterXY()

@@ -9,8 +9,10 @@ setmetatable(PoolTable, GameObject)
 local _borders
 local _image
 
-function PoolTable:new(world)
-   
+function PoolTable:getImage() return _image end
+
+function PoolTable.new(world)
+    --print(world)
     local instance = setmetatable({}, PoolTable)
 
     _borders = {}
@@ -40,10 +42,5 @@ function PoolTable:update(dt)
 end
 
 function PoolTable:draw() 
-    love.graphics.draw(self.image, 50, 100)   
-end 
-
-function PoolTable:getImage()
-    return _image
+    love.graphics.draw(_image, 50, 100)   
 end
-

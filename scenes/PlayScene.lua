@@ -20,15 +20,15 @@ local _uiListBalls
 local _cue
 local _matchState
 
-function PlayScene.new(world)
+function PlayScene.new(world)    
     local instance = setmetatable({}, PlayScene)
-    print(world)
-    _poolTable = PoolTable:new(world)
    
-    _uiStrengthBar = UIStrengthBar:new(585, 10, false) 
+    _poolTable = PoolTable.new(world)
+   
+    _uiStrengthBar = UIStrengthBar.new(585, 10, false) 
     _whiteBall, _balls = buildInitialPositionOfBalls(world, _poolTable, Ball)       
-    _uiListBalls = UIListBalls:new(50, 10, _balls)   
-    _cue = Cue:new(world, _whiteBall, _uiStrengthBar.hit)    
+    _uiListBalls = UIListBalls.new(50, 10, _balls)   
+    _cue = Cue.new(world, _whiteBall, _uiStrengthBar.hit)    
 
     _matchState = StateManager.new()
     

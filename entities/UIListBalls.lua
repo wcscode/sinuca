@@ -1,6 +1,6 @@
 UIListBalls = {}
-
 UIListBalls.__index = UIListBalls
+setmetatable(UIListBalls, GameObject)
 
 local _x
 local _y
@@ -10,7 +10,7 @@ local _balls = {}
 local _gapX = 30
 local _gapY = 10
 
-function UIListBalls:new(x, y, balls)     
+function UIListBalls.new(x, y, balls)     
     local instance = setmetatable({}, UIListBalls)
 
     _x = x
@@ -23,8 +23,7 @@ function UIListBalls:new(x, y, balls)
 end
 
 function UIListBalls:update(dt)
-    
-   
+    return nil
 end
 
 function UIListBalls:draw()
@@ -34,6 +33,6 @@ function UIListBalls:draw()
     love.graphics.reset()
 
     for i = 2, #_balls do        
-        love.graphics.draw(_balls[i].image, _x + _gapX * (i - 1), _y + _gapY)  
+        love.graphics.draw(_balls[i]:getImage(), _x + _gapX * (i - 1), _y + _gapY)  
     end   
 end

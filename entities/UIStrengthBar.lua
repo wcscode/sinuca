@@ -1,36 +1,43 @@
-UIStrengthBar = { x, y, width, height, strength }
+UIStrengthBar = {}
+UIStrengthBar.__index = UIStrengthBar
+setmetatable(UIStrengthBar, GameObject)
 
-function UIStrengthBar:new(x, y, active)    
-    self.x = x
-    self.y = y
-    self.width = 150
-    self.height = 20   
-    self.coinWidth = 20 
-    self.coinMaxXPosition = self.width / 2 - self.coinWidth / 2
-    self.hit = {strength = 0}
-    self.active = active
-    self.acc = 0
+local _x
+local _y
+local _width = 150
+local _height = 20   
+local _coinWidth = 20 
+local _coinMaxXPosition = _width / 2 - _coinWidth / 2
+local _hit = {strength = 0}
+local _active
+local _acc = 0
 
-    return setmetatable(self, {__index = UIStrengthBar})
+function UIStrengthBar.new(x, y, active)    
+    local instance = setmetatable({}, UIStrengthBar)
+    _x = x
+    _y = y   
+    _active = active
+
+    return instance
 end   
 
 function UIStrengthBar:update(dt)
-    self.acc = self.acc + dt + 0.02
+    _acc = _acc + dt + 0.02
    
-    self.hit.strength = normalize(math.cos(self.acc), 0, 1)
+    _hit.strength = normalize(math.cos(_acc), 0, 1)
   
-    if self.hit.strength >= self.width then
-        self.hit.strength = 1
-        self.acc = 0
+    if _hit.strength >= _width then
+        _hit.strength = 1
+        _acc = 0
     end
 end
 
 function UIStrengthBar:draw()
     love.graphics.setColor(1, 1, 1)
-    love.graphics.rectangle("fill", self.x + self.hit.strength * self.coinMaxXPosition, self.y, self.coinWidth , self.height)
+    love.graphics.rectangle("fill", _x + _hit.strength * _coinMaxXPosition, _y, _coinWidth , _height)
 
     love.graphics.setColor(1, 0, 0)
-    love.graphics.rectangle("line", self.x, self.y, self.width, self.height)
+    love.graphics.rectangle("line", _x, _y, _width, _height)
     love.graphics.reset()
 end    
 

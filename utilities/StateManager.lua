@@ -4,9 +4,9 @@ StateManager.__index = StateManager
 local _states = {}
 local _currentState
 
-function StateManager:new()
+function StateManager.new()
     local instance = setmetatable({}, StateManager)
-
+    
     return instance
 end
 

@@ -1,5 +1,4 @@
 Scene = {}
-
 Scene.__index = Scene
 
 function Scene:update(dt)

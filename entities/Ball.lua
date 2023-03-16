@@ -1,41 +1,59 @@
 require "entities.GameObject"
 
-Ball = { startX, startY, number, radius  }
-
+Ball = {}
+Ball.__index = Ball
 setmetatable(Ball, GameObject)
 
-function Ball:new(world, startX, startY, number)   
-    self.__index = self
+local _startX
+local _startY
+local _number
+local _radius = 12
+local _body
+local _shape
+local _fixture
+local _image
+local _centerOrigin
+
+function Ball:getBody() return _body end
+function Ball:getImage() return _image end
+function Ball:getNumber() return _number end
+function Ball:getFixture() return _fixture end
+
+function Ball.new(world, startX, startY, number) 
+    local instance = setmetatable({}, Ball)
+
+    _startX = startX or 0
+    _startY = startY or 0
+    _number = number or 0
+
+    if _number == 0 then _radius = 14 else _radius = 12 end
+
+    _body = love.physics.newBody(world, _startX, _startY, "dynamic")
+    _shape = love.physics.newCircleShape(_radius)
+    _fixture = love.physics.newFixture(_body, _shape)
+    _fixture:setUserData(_number)
+    _fixture:setFriction(1)
+    _fixture:setDensity(1)
+    _fixture:setRestitution(0.5)
+    _image = love.graphics.newImage("assets/images/ball_" .. _number .. ".png", {dpiscale = 6 })   
+    _centerOrigin = _image:getWidth() / 2
     
-    local _ = setmetatable({}, Ball)
-
-    _.startX = startX or 0
-    _.startY = startY or 0
-    _.number = number or 0
-
-    if _.number == 0 then self.radius = 14 else self.radius = 12 end
-
-    _.body = love.physics.newBody(world, _.startX, _.startY, "dynamic")
-    _.shape = love.physics.newCircleShape(self.radius)
-    _.fixture = love.physics.newFixture(_.body, _.shape)
-    _.fixture:setUserData(_.number)
-    _.fixture:setFriction(1)
-    _.fixture:setDensity(1)
-    _.fixture:setRestitution(0.5)
-    _.image = love.graphics.newImage("assets/images/ball_" .. _.number .. ".png", {dpiscale = 6 })   
-    _.centerOrigin = _.image:getWidth() / 2
-    
-    return _
+    return instance
 end
 
 function Ball:update(dt)
    
 end
 
-function Ball:draw()
-   -- print("O número da bola é" .. self.number)
-   -- if self.body then
-        love.graphics.draw(self.image, self.body:getX(),  self.body:getY(), 0, 1, 1, self.centerOrigin, self.centerOrigin)  
-   -- end
+function Ball:draw()   
+    love.graphics.draw(
+        _image, 
+        _body:getX(), 
+        _body:getY(), 
+        0, 
+        1, 
+        1, 
+        _centerOrigin, 
+        _centerOrigin
+    ) 
 end 
-
