@@ -6,10 +6,10 @@ end
 function debugBalls(balls) 
     local nTables = ""
     local nDatas = ""
-    for i, ball in pairs(balls) do
-       
-        nTables = nTables .."i "..i.." number "..ball.number.. "\n "
 
+    for i, ball in pairs(balls) do       
+        --nTables = nTables .."i "..i.." number "..ball.number.. "\n "
+        nTables = nTables .. ball.number.." "..tostring(ball.body:isAwake()).." "..ball.body:getAngle().."\n "
        -- if not ball.fixture:isDestroyed() then
             nDatas = nDatas .. ball.fixture:getUserData() .. " "
        -- end

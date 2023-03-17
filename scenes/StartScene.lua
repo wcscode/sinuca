@@ -39,3 +39,9 @@ function StartScene:draw()
     )
     love.graphics.reset()
 end
+
+function StartScene:mousepressed(x, y, button, istouch)
+    if _stateScene:isActive("start") then
+        _stateScene:setActive("play")
+    end
+end

@@ -28,7 +28,8 @@ function Ball.new(world, startX, startY, number)
 end
 
 function Ball:update(dt)
-   return nil
+   --local a 
+   --self.body:applyForce(0, 0)
 end
 
 function Ball:draw()   

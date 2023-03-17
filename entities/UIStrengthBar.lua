@@ -35,6 +35,7 @@ function UIStrengthBar:draw()
 
     love.graphics.setColor(1, 0, 0)
     love.graphics.rectangle("line", self.x, self.y, _width, _height)
+    
     love.graphics.reset()
 end    
 
