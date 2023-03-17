@@ -9,7 +9,8 @@ function debugBalls(balls)
 
     for i, ball in pairs(balls) do       
         --nTables = nTables .."i "..i.." number "..ball.number.. "\n "
-        nTables = nTables .. ball.number.." "..tostring(ball.body:isAwake()).." "..ball.body:getAngle().."\n "
+        local vx, vy = ball.body:getLinearVelocity()
+        nTables = nTables .. ball.number.." "..tostring(ball.body:isAwake()).." x "..vx.. " y " ..vy.."\n "
        -- if not ball.fixture:isDestroyed() then
             nDatas = nDatas .. ball.fixture:getUserData() .. " "
        -- end

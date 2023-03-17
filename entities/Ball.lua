@@ -19,17 +19,19 @@ function Ball.new(world, startX, startY, number)
     instance.fixture = love.physics.newFixture(instance.body, instance.shape)
     instance.fixture:setUserData(instance.number)
     instance.fixture:setFriction(1)
-    instance.fixture:setDensity(1)
+    instance.body:setMass(1)
     instance.fixture:setRestitution(0.5)
     instance.image = love.graphics.newImage("assets/images/ball_" .. instance.number .. ".png", {dpiscale = 6 })   
     _centerOrigin = instance.image:getWidth() / 2
     
+    instance.vel = {x = 0, y = 0}
     return instance
 end
 
+
 function Ball:update(dt)
-   --local a 
-   --self.body:applyForce(0, 0)
+  
+  
 end
 
 function Ball:draw()   

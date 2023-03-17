@@ -39,6 +39,13 @@ function PlayScene.new(world)
 
     _matchState:setActive("analyzing")    
 
+    --[[bbBody = love.physics.newBody(world, 100, 100, "static")
+    bbShape = love.physics.newRectangleShape(100, 100, 100, 100)
+    bbFixture = love.physics.newFixture(bbBody, bbShape)
+    bbFixture:setDensity(0)
+    bbFixture:setSensor(true)
+    --bbShape:setFriction(1)
+    ]]--
     return instance
 end
 
@@ -67,9 +74,11 @@ function PlayScene:update(dt)
 end
 
 function PlayScene:draw() 
-    --_uiListBalls:draw() 
+  --_uiListBalls:draw() 
     _uiStrengthBar:draw()
     _poolTable:draw()
+ --   love.graphics.rectangle("fill", bbBody:getX(), bbBody:getY(), 100,100)
+   
     _cue:draw()
 
     for _, ball in pairs(_balls) do       
