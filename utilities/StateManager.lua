@@ -24,6 +24,10 @@ function StateManager:setActive(name)
     end
 end
 
+function StateManager:getActive()    
+    return self.currentState.name, self.currentState.value
+end
+
 function StateManager:isActive(name)    
     return self.currentState.name == name
 end

@@ -19,7 +19,7 @@ local _balls
 local _uiListBalls
 local _cue
 local _matchState
-local _allBallsIsAwake
+local _allBallsIsSleeping
 
 function PlayScene.new(world)    
     local instance = setmetatable({}, PlayScene)
@@ -56,21 +56,21 @@ function PlayScene:update(dt)
         _uiStrengthBar:update(dt)
     end
 
+    _allBallsIsSleeping = true
+
     for _, ball in pairs(_balls) do
         ball:update(dt)
-
-        if _matchState:isActive("running") then
-            _allBallsIsAwake = true
-
-            if not ball.Body:isAwake() then
-                _allBallsIsAwake = false
-            end
-
-            if _allBallsIsAwake then
-                _matchState:setActive("analyzing")
-            end   
+        --print(_matchState:getActive(), _allBallsIsSleeping)
+        if _matchState:isActive("rolling") then
+            if ball.body:isAwake() then                
+                _allBallsIsSleeping = false
+            end             
         end
     end
+
+    if  _matchState:isActive("rolling") and _allBallsIsSleeping then
+        _matchState:setActive("analyzing")
+    end 
 end
 
 function PlayScene:draw() 
@@ -101,6 +101,7 @@ function PlayScene:mousepressed(x, y, button, istouch)
     end
 
     if button == 2 then
+       -- _balls[1].body:setLinearVelocity(0, 0)   
         enableDebug = not enableDebug
     end
 end

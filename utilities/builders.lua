@@ -21,9 +21,9 @@ function buildInitialPositionOfBalls(world, poolTable, ball)
             )
 
             _ball.body:setMass(4)
-
+            
             table.insert(balls, _ball) 
-
+            
             number = number + 1
         end
 

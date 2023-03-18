@@ -22,16 +22,23 @@ function Ball.new(world, startX, startY, number)
     instance.body:setMass(1)
     instance.fixture:setRestitution(0.5)
     instance.image = love.graphics.newImage("assets/images/ball_" .. instance.number .. ".png", {dpiscale = 6 })   
+    instance.body:setLinearDamping(0.3)
     _centerOrigin = instance.image:getWidth() / 2
-    
-    instance.vel = {x = 0, y = 0}
+
+   
     return instance
 end
 
-
 function Ball:update(dt)
-  
-  
+    
+    local threshold = 1.3
+    local x, y = self.body:getLinearVelocity()
+    if  x < threshold and y > -threshold and y < threshold and y > -threshold then
+       -- print(self.body:getLinearVelocity())
+      -- Put the ball to sleep if its velocity is below the threshold
+      self.body:setAwake(false)
+    end
+    
 end
 
 function Ball:draw()   
