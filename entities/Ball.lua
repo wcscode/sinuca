@@ -11,10 +11,14 @@ function Ball.new(world, startX, startY, number)
     
     instance.number = number or 0
     local radius = 12
-
-    if instance.number == 0 then radius = 14 end
-
+    
     instance.body = love.physics.newBody(world, startX, startY, "dynamic")
+
+    if instance.number == 0 then 
+        radius = 14 
+        instance.body:setBullet(true)
+    end
+
     instance.shape = love.physics.newCircleShape(radius)
     instance.fixture = love.physics.newFixture(instance.body, instance.shape)
     instance.fixture:setUserData(instance.number)
@@ -24,8 +28,7 @@ function Ball.new(world, startX, startY, number)
     instance.image = love.graphics.newImage("assets/images/ball_" .. instance.number .. ".png", {dpiscale = 6 })   
     instance.body:setLinearDamping(0.3)
     _centerOrigin = instance.image:getWidth() / 2
-
-   
+       
     return instance
 end
 

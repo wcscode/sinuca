@@ -2,7 +2,7 @@ require "scenes.Scene"
 require "entities.PoolTable"
 require "entities.Ball"
 require "entities.UIStrengthBar"
-require "entities.UIListBalls"
+require "entities.UIMoves"
 require "entities.Cue"
 require "utilities.builders"
 require "utilities.general"
@@ -14,6 +14,7 @@ setmetatable(PlayScene, Scene)
 
 local _poolTable
 local _uiStrengthBar
+local _uiMoves
 local _whiteBall
 local _balls
 local _uiListBalls
@@ -28,7 +29,7 @@ function PlayScene.new(world)
    
     _uiStrengthBar = UIStrengthBar.new(585, 10, false) 
     _whiteBall, _balls = buildInitialPositionOfBalls(world, _poolTable, Ball)       
-    --_uiListBalls = UIListBalls.new(50, 10, _balls)   
+    _uiMoves = UIMoves.new(50, 10, 10)   
     _cue = Cue.new(world, _whiteBall, _uiStrengthBar.hit)    
 
     _matchState = StateManager.new()
@@ -39,18 +40,13 @@ function PlayScene.new(world)
 
     _matchState:setActive("analyzing")    
 
-    --[[bbBody = love.physics.newBody(world, 100, 100, "static")
-    bbShape = love.physics.newRectangleShape(100, 100, 100, 100)
-    bbFixture = love.physics.newFixture(bbBody, bbShape)
-    bbFixture:setDensity(0)
-    bbFixture:setSensor(true)
-    --bbShape:setFriction(1)
-    ]]--
     return instance
 end
 
 function PlayScene:update(dt)
-    --_uiListBalls:update(dt)
+    if _matchState:isActive("analyzing") then
+        _uiMoves:update(dt)
+    end
 
     if _matchState:isActive("strike") then
         _uiStrengthBar:update(dt)
@@ -60,7 +56,7 @@ function PlayScene:update(dt)
 
     for _, ball in pairs(_balls) do
         ball:update(dt)
-        --print(_matchState:getActive(), _allBallsIsSleeping)
+
         if _matchState:isActive("rolling") then
             if ball.body:isAwake() then                
                 _allBallsIsSleeping = false
@@ -70,22 +66,25 @@ function PlayScene:update(dt)
 
     if  _matchState:isActive("rolling") and _allBallsIsSleeping then
         _matchState:setActive("analyzing")
+        
+        if not _poolTable:hasPoint() then
+            _poolTable:resetPoint()
+            _uiMoves:substractMove()
+        end
     end 
 end
 
 function PlayScene:draw() 
-  --_uiListBalls:draw() 
+    _uiMoves:draw() 
     _uiStrengthBar:draw()
-    _poolTable:draw()
- --   love.graphics.rectangle("fill", bbBody:getX(), bbBody:getY(), 100,100)
-   
+    _poolTable:draw()  
     _cue:draw()
 
     for _, ball in pairs(_balls) do       
         ball:draw()
     end    
     
-    if not enableDebug then        
+    if enableDebug then        
         debugBalls(_balls)
     end
 end
@@ -100,8 +99,7 @@ function PlayScene:mousepressed(x, y, button, istouch)
        _matchState:setActive("strike")
     end
 
-    if button == 2 then
-       -- _balls[1].body:setLinearVelocity(0, 0)   
+    if button == 2 then         
         enableDebug = not enableDebug
     end
 end
@@ -120,7 +118,8 @@ function PlayScene:beginContact(a, b, coll)
         if(numberOfBall >= 1) then
             for index, ball in pairs(_balls) do
                 if ball.number == numberOfBall then
-                    table.remove(_balls, index)    
+                    table.remove(_balls, index) 
+                    _poolTable:beginContact(a, b, coll)   
                 end
             end
 

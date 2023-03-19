@@ -6,6 +6,8 @@ PoolTable = {}
 PoolTable.__index = PoolTable
 setmetatable(PoolTable, GameObject)
 
+local _hasPoint = false
+
 function PoolTable:getImage() return _image end
 
 function PoolTable.new(world)   
@@ -20,12 +22,12 @@ function PoolTable.new(world)
     table.insert(borders, buildPoolBordersShape(world, 82, 156, 11, 275, "vertical", false, false))  
     table.insert(borders, buildPoolBordersShape(world, 701, 156, 11, 275, "vertical", true, false))    
 
-    table.insert(borders, buildPoolPocketShape(world, 82, 136, 17))
-    table.insert(borders, buildPoolPocketShape(world, 387, 127, 17))
-    table.insert(borders, buildPoolPocketShape(world, 696, 136, 17))
-    table.insert(borders, buildPoolPocketShape(world, 696, 450, 17))
-    table.insert(borders, buildPoolPocketShape(world, 387, 458, 17))
-    table.insert(borders, buildPoolPocketShape(world, 83, 451, 17))
+    table.insert(borders, buildPoolPocketShape(world, 82, 136, 8)) --17
+    table.insert(borders, buildPoolPocketShape(world, 387, 127, 8))
+    table.insert(borders, buildPoolPocketShape(world, 696, 136, 8))
+    table.insert(borders, buildPoolPocketShape(world, 696, 450, 8))
+    table.insert(borders, buildPoolPocketShape(world, 387, 458, 8))
+    table.insert(borders, buildPoolPocketShape(world, 83, 451, 8))
 
     instance.image = love.graphics.newImage("assets/images/table.png", {dpiscale = 6.66})
 
@@ -38,4 +40,16 @@ end
 
 function PoolTable:draw() 
     love.graphics.draw(self.image, 50, 100)   
+end
+
+function PoolTable:beginContact(a, b, coll)  
+    _hasPoint = true 
+end
+
+function PoolTable:hasPoint() 
+    return _hasPoint 
+end
+
+function PoolTable:resetPoint()
+    _hasPoint = false
 end
