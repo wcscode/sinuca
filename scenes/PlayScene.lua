@@ -7,6 +7,7 @@ require "entities.Cue"
 require "utilities.builders"
 require "utilities.general"
 require "utilities.StateManager"
+require "entities.UIGameOver"
 
 PlayScene = {} 
 PlayScene.__index = PlayScene
@@ -21,16 +22,18 @@ local _uiListBalls
 local _cue
 local _matchState
 local _allBallsIsSleeping
+local _uiGameOver
 
 function PlayScene.new(world)    
     local instance = setmetatable({}, PlayScene)
    
-    _poolTable = PoolTable.new(world)
+    _poolTable = PoolTable.new(world)   
    
     _uiStrengthBar = UIStrengthBar.new(585, 10, false) 
     _whiteBall, _balls = buildInitialPositionOfBalls(world, _poolTable, Ball)       
-    _uiMoves = UIMoves.new(50, 10, 10)   
+    _uiMoves = UIMoves.new(50, 10, 1)   
     _cue = Cue.new(world, _whiteBall, _uiStrengthBar.hit)    
+    _uiGameOver = UIGameOver.new()
 
     _matchState = StateManager.new()
     
@@ -38,6 +41,7 @@ function PlayScene.new(world)
     _matchState:add("strike")
     _matchState:add("rolling")
     _matchState:add("fault")
+    _matchState:add("gameOver")
 
     _matchState:setActive("analyzing")    
 
@@ -46,13 +50,18 @@ end
 
 function PlayScene:update(dt)
     if _matchState:isActive("analyzing") then
+
+        if _uiMoves:getRemainingMoves() == 0 then
+            _matchState:setActive("gameOver")
+        end
+
         _uiMoves:update(dt)
         return nil
     end
 
     if _matchState:isActive("strike") then
         _uiStrengthBar:update(dt)
-       -- return nil
+        return nil
     end
 
     if _matchState:isActive("rolling") then
@@ -74,11 +83,8 @@ function PlayScene:update(dt)
             _matchState:setActive("analyzing")
         end
 
-       -- return nil
+        return nil
     end
-
-    --if _matchState:isActive("fault") then
-    --end
 end
 
 function PlayScene:draw() 
@@ -90,7 +96,11 @@ function PlayScene:draw()
     for _, ball in pairs(_balls) do       
         ball:draw()
     end    
-    
+
+    if _matchState:isActive("gameOver") then
+       _uiGameOver:draw()
+    end
+
     if enableDebug then        
         debugBalls(_balls)
     end
@@ -108,9 +118,20 @@ function PlayScene:mousepressed(x, y, button, istouch)
 
     if _matchState:isActive("strike") then       
         _cue:mousepressed(x, y, button, istouch)
-        _matchState:setActive("rolling")       
+        _matchState:setActive("rolling") 
+        return nil      
     end 
+
+    if _matchState:isActive("fault") then       
+        _matchState:setActive("analyzing")
+        return nil
+    end
+
+    if _matchState:isActive("gameOver") then
+        _stateScene:setActive("start")
+    end
 end
+
 
 function PlayScene:mousemoved(x, y, dx, dy, istouch)  
     if _matchState:isActive("analyzing") then
@@ -123,20 +144,30 @@ function PlayScene:mousemoved(x, y, dx, dy, istouch)
 end
 
 function PlayScene:beginContact(a, b, coll)    
-    if a:getUserData() == "pocket" then 
-        local numberOfBall = b:getUserData()        
+    if _matchState:isActive("rolling") then
+        if a:getUserData() == "pocket" then 
+            local numberOfBall = b:getUserData()        
 
-        if(numberOfBall >= 1) then
-            for index, ball in pairs(_balls) do
-                if ball.number == numberOfBall then
-                    table.remove(_balls, index) 
-                    _poolTable:beginContact(a, b, coll)   
+            if(numberOfBall >= 1) then
+                for index, ball in pairs(_balls) do
+                    if ball.number == numberOfBall then
+                        table.remove(_balls, index) 
+                        _poolTable:beginContact(a, b, coll)   
+                    end
                 end
-            end
 
-            b:destroy() 
-        else
-            _matchState:setActive("fault")                   
+                b:destroy() 
+            else            
+            _matchState:setActive("fault")  
+            _whiteBall.body:setAwake(false)
+            _uiMoves:substractMove()                            
+            end
         end
     end
+
+    if _matchState:isActive("fault") then
+        if type(a:getUserData()) == "number" then
+            _uiMoves:substractMove()     
+        end
+    end        
 end   

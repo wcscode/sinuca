@@ -7,7 +7,9 @@ _stateScene = {}
 enableDebug = false
 
 function love.load()         
-    _world = love.physics.newWorld(0, 0, true)  
+    _world = love.physics.newWorld(0, 0, true) 
+    love.mouse.setVisible(false) 
+    --love.mouse.setRelativeMode(true)
     --for n in pairs(_G) do print(n) end
     _world:setCallbacks(beginContact, endContact, preSolve, postSolve)
 
