@@ -37,6 +37,7 @@ function PlayScene.new(world)
     _matchState:add("analyzing")
     _matchState:add("strike")
     _matchState:add("rolling")
+    _matchState:add("fault")
 
     _matchState:setActive("analyzing")    
 
@@ -46,32 +47,38 @@ end
 function PlayScene:update(dt)
     if _matchState:isActive("analyzing") then
         _uiMoves:update(dt)
+        return nil
     end
 
     if _matchState:isActive("strike") then
         _uiStrengthBar:update(dt)
+       -- return nil
     end
 
-    _allBallsIsSleeping = true
+    if _matchState:isActive("rolling") then
+        _allBallsIsSleeping = true
 
-    for _, ball in pairs(_balls) do
-        ball:update(dt)
-
-        if _matchState:isActive("rolling") then
+        for _, ball in pairs(_balls) do
+            ball:update(dt)
+            
             if ball.body:isAwake() then                
                 _allBallsIsSleeping = false
-            end             
+            end
         end
+
+        if _allBallsIsSleeping then
+            if not _poolTable:hasPoint() then 
+                _uiMoves:substractMove()
+            end
+            _poolTable:resetPoint()
+            _matchState:setActive("analyzing")
+        end
+
+       -- return nil
     end
 
-    if  _matchState:isActive("rolling") and _allBallsIsSleeping then
-        _matchState:setActive("analyzing")
-        
-        if not _poolTable:hasPoint() then
-            _poolTable:resetPoint()
-            _uiMoves:substractMove()
-        end
-    end 
+    --if _matchState:isActive("fault") then
+    --end
 end
 
 function PlayScene:draw() 
@@ -89,30 +96,34 @@ function PlayScene:draw()
     end
 end
 
-function PlayScene:mousepressed(x, y, button, istouch)    
-    if _matchState:isActive("strike") then
-        _matchState:setActive("rolling")
-        _cue:mousepressed(x, y, button, istouch)
-    end 
-
-    if _matchState:isActive("analyzing") then
-       _matchState:setActive("strike")
-    end
-
+function PlayScene:mousepressed(x, y, button, istouch)  
     if button == 2 then         
         enableDebug = not enableDebug
     end
+    
+    if _matchState:isActive("analyzing") then
+        _matchState:setActive("strike")  
+        return nil     
+     end
+
+    if _matchState:isActive("strike") then       
+        _cue:mousepressed(x, y, button, istouch)
+        _matchState:setActive("rolling")       
+    end 
 end
 
 function PlayScene:mousemoved(x, y, dx, dy, istouch)  
     if _matchState:isActive("analyzing") then
         _cue:mousemoved(x, y, dx, dy, istouch)
-    end     
+    end  
+    
+    if _matchState:isActive("fault") then
+        _whiteBall.body:setPosition(x, y)
+    end
 end
 
 function PlayScene:beginContact(a, b, coll)    
     if a:getUserData() == "pocket" then 
-
         local numberOfBall = b:getUserData()        
 
         if(numberOfBall >= 1) then
@@ -123,7 +134,9 @@ function PlayScene:beginContact(a, b, coll)
                 end
             end
 
-            b:destroy()            
+            b:destroy() 
+        else
+            _matchState:setActive("fault")                   
         end
     end
 end   

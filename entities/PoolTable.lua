@@ -42,7 +42,7 @@ function PoolTable:draw()
     love.graphics.draw(self.image, 50, 100)   
 end
 
-function PoolTable:beginContact(a, b, coll)  
+function PoolTable:beginContact(a, b, coll)    
     _hasPoint = true 
 end
 
