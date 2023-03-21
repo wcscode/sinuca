@@ -49,8 +49,8 @@ function PlayScene.new(world)
 end
 
 function PlayScene:update(dt)
-    if _matchState:isActive("analyzing") then
 
+    if _matchState:isActive("analyzing") then
         if _uiMoves:getRemainingMoves() == 0 then
             _matchState:setActive("gameOver")
         end
@@ -158,9 +158,9 @@ function PlayScene:beginContact(a, b, coll)
 
                 b:destroy() 
             else            
-            _matchState:setActive("fault")  
-            _whiteBall.body:setAwake(false)
-            _uiMoves:substractMove()                            
+                _matchState:setActive("fault")  
+                _whiteBall.body:setAwake(false)
+                _uiMoves:substractMove()                            
             end
         end
     end

@@ -33,7 +33,7 @@ function UIGameOver:draw()
         _ROTATE_RADIAN, 
         _SCALE_X, 
         _SCALE_Y, 
-        _screenCenterX,        
+        _screenCenterX        
     )
 end
 
