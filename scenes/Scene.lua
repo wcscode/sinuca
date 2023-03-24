@@ -21,5 +21,5 @@ function Scene:beginContact(a, b, coll)
   
 end 
 
-function Scene:restart()
+function Scene:unload()
 end

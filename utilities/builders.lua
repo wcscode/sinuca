@@ -12,7 +12,6 @@ function buildInitialPositionOfBalls(world, poolTable, ball)
 
     for x = 1, 5 do        
         for y = 1, ballPerColumn  do   
-
             local _ball = ball.new(
                 world, 
                 ballInitialPosition.x + (x * gapBetweenBall), 

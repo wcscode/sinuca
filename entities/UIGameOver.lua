@@ -12,11 +12,13 @@ local _SCALE_X, _SCALE_Y = 1, 1
 function UIGameOver.new()     
     local instance = setmetatable({}, UIGameOver)
 
+    instance.message = "GAME OVER"
+   
     return instance
 end
 
 function UIGameOver:update(dt)
-    return nil
+
 end
 
 function UIGameOver:draw()
@@ -25,7 +27,7 @@ function UIGameOver:draw()
     love.graphics.setFont(_font)
     love.graphics.setColor(1, 1, 1)
     love.graphics.printf(
-        "GAME OVER" , 
+        self.message, 
         _screenCenterX, 
         _screenCenterY, 
         love.graphics:getWidth(), 

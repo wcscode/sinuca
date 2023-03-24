@@ -16,8 +16,8 @@ function love.load()
 
     _stateScene = SceneManager.new()
  
-    _stateScene:add("start", StartScene.new())
-    _stateScene:add("play", PlayScene.new())
+    _stateScene:add("start", StartScene)
+    _stateScene:add("play", PlayScene)
    
     _stateScene:setActive("start")
 end 
