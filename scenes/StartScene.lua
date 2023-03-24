@@ -18,7 +18,7 @@ function StartScene.new()
 end
 
 function StartScene:update(dt)
-    
+    return nil
 end
 
 function StartScene:draw()  
@@ -41,7 +41,7 @@ function StartScene:draw()
 end
 
 function StartScene:mousepressed(x, y, button, istouch)
-    if _stateScene:isActive("start") then
-        _stateScene:setActive("play")
+    if _G._stateScene:isActive("start") then
+        _G._stateScene:setActive("play")
     end
 end

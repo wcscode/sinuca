@@ -19,4 +19,7 @@ end
 
 function Scene:beginContact(a, b, coll)
   
-end    
+end 
+
+function Scene:restart()
+end

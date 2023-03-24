@@ -24,15 +24,15 @@ local _matchState
 local _allBallsIsSleeping
 local _uiGameOver
 
-function PlayScene.new(world)    
+function PlayScene.new()    
     local instance = setmetatable({}, PlayScene)
    
-    _poolTable = PoolTable.new(world)   
+    _poolTable = PoolTable.new(_G._world)   
    
     _uiStrengthBar = UIStrengthBar.new(585, 10, false) 
-    _whiteBall, _balls = buildInitialPositionOfBalls(world, _poolTable, Ball)       
+    _whiteBall, _balls = buildInitialPositionOfBalls(_G._world, _poolTable, Ball)       
     _uiMoves = UIMoves.new(50, 10, 1)   
-    _cue = Cue.new(world, _whiteBall, _uiStrengthBar.hit)    
+    _cue = Cue.new(_G._world, _whiteBall, _uiStrengthBar.hit)    
     _uiGameOver = UIGameOver.new()
 
     _matchState = StateManager.new()
@@ -127,11 +127,10 @@ function PlayScene:mousepressed(x, y, button, istouch)
         return nil
     end
 
-    if _matchState:isActive("gameOver") then
-        _stateScene:setActive("start")
+    if _matchState:isActive("gameOver") then       
+        _G._stateScene:setActive("start")        
     end
 end
-
 
 function PlayScene:mousemoved(x, y, dx, dy, istouch)  
     if _matchState:isActive("analyzing") then
@@ -170,4 +169,4 @@ function PlayScene:beginContact(a, b, coll)
             _uiMoves:substractMove()     
         end
     end        
-end   
+end

@@ -1,8 +1,9 @@
 require "scenes.StartScene"
 require "scenes.PlayScene"
 require "utilities.debug"
+require "utilities.SceneManager"
 
-local _world 
+_world = nil
 _stateScene = {}
 enableDebug = false
 
@@ -13,10 +14,10 @@ function love.load()
     --for n in pairs(_G) do print(n) end
     _world:setCallbacks(beginContact, endContact, preSolve, postSolve)
 
-    _stateScene = StateManager.new()
+    _stateScene = SceneManager.new()
  
     _stateScene:add("start", StartScene.new())
-    _stateScene:add("play", PlayScene.new(_world))
+    _stateScene:add("play", PlayScene.new())
    
     _stateScene:setActive("start")
 end 
