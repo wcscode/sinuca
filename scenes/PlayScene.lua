@@ -55,7 +55,7 @@ function PlayScene:update(dt)
     if _matchState:isActive("analyzing") then        
         _uiGameOver:update(dt)
 
-        if _uiMoves:getRemainingMoves() == 0 then
+        if _uiMoves:getRemainingMoves() < 1 then
             _matchState:setActive("gameOver")
             return nil
         end
@@ -92,6 +92,7 @@ function PlayScene:update(dt)
             end
             _poolTable:resetPoint()
             _matchState:setActive("analyzing")
+            _uiStrengthBar:reset()
         end
 
         return nil

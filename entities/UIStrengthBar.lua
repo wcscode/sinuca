@@ -37,5 +37,9 @@ function UIStrengthBar:draw()
     love.graphics.rectangle("line", self.x, self.y, _width, _height)
     
     love.graphics.reset()
-end    
+end   
+
+function UIStrengthBar:reset()
+    self.acc = 0
+end
 
